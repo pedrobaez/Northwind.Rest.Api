@@ -2,6 +2,57 @@
 
 ASP.NET Core Web API using ADO.NET (Microsoft.Data.SqlClient) against the Northwind database.
 
+## Prerequisites
+
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) or later
+- SQL Server (LocalDB, Express, Developer, or any edition)
+- Northwind sample database
+
+### Install Northwind Database
+
+The Northwind database is a sample database originally created by Microsoft. You have several options:
+
+#### Option 1: Download from Microsoft (Recommended)
+1. Download the Northwind installer script:
+   - [Northwind SQL Script (GitHub)](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs)
+   - Direct link: [instnwnd.sql](https://raw.githubusercontent.com/Microsoft/sql-server-samples/master/samples/databases/northwind-pubs/instnwnd.sql)
+
+2. Run the script in SQL Server Management Studio (SSMS) or Azure Data Studio:
+   ```sql
+   -- Open the instnwnd.sql file and execute it
+   -- This will create the Northwind database
+   ```
+
+3. Or use sqlcmd from command line:
+   ```powershell
+   sqlcmd -S . -E -i instnwnd.sql
+   ```
+
+#### Option 2: Alternative Script Repository
+- [Northwind Database Scripts (northwind-SQLServer4)](https://github.com/jpwhite3/northwind-SQLServer4)
+  ```powershell
+  git clone https://github.com/jpwhite3/northwind-SQLServer4.git
+  cd northwind-SQLServer4
+  sqlcmd -S . -E -i northwind.sql
+  ```
+
+#### Option 3: Using Docker (SQL Server in Container)
+```powershell
+# Pull and run SQL Server
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Passw0rd" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
+
+# Download and run Northwind script
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Microsoft/sql-server-samples/master/samples/databases/northwind-pubs/instnwnd.sql" -OutFile "instnwnd.sql"
+sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -i instnwnd.sql
+```
+
+### Verify Installation
+```sql
+USE Northwind;
+SELECT COUNT(*) FROM Products;  -- Should return 77
+SELECT COUNT(*) FROM Customers; -- Should return 91
+```
+
 ## Configure
 
 Update the connection string in `appsettings.json`:
